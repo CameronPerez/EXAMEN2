@@ -1,0 +1,59 @@
+import numpy as np
+from datetime import datetime
+
+num_pisos = 10
+departamentos_por_piso = 4
+departamentos_disponibles = np.ones((num_pisos, departamentos_por_piso), dtype=bool)
+precios = {'A': 3800, 'B': 3000, 'C': 2800, 'D': 3500}
+compradores = []
+ventas_totales = 0
+
+
+def comprar_departamento():
+    global ventas_totales
+    while True:
+        try:
+            piso = int(input("Ingrese el número del piso (1-10): "))
+            tipo = input("Ingrese el tipo de departamento (A, B, C, D): ")
+            departamento = tipo + str(piso)
+            if piso < 1 or piso > num_pisos or tipo not in precios:
+                print("La opción ingresada es inválida. Intente nuevamente.")
+                continue
+            elif not departamentos_disponibles[piso-1, ord(tipo)-ord('A')]:
+                print("El departamento seleccionado no está disponible. Intente nuevamente.")
+                continue
+            run = input("Ingrese el RUN del comprador (sin guiones ni puntos): ")
+            compradores.append((departamento, run))
+            ventas_totales += precios[tipo]
+            departamentos_disponibles[piso-1, ord(tipo)-ord('A')] = False
+            print("La operación se ha realizado correctamente.")
+            break
+        except ValueError:
+            print("El valor ingresado es inválido. Intente nuevamente.")
+
+
+while True:
+    print("----- Menú Principal -----")
+    print("1. Comprar departamento")
+    print("2. Mostrar departamentos disponibles")
+    print("3. Ver listado de compradores")
+    print("4. Mostrar ganancias totales")
+    print("5. Salir")
+
+    opcion = input("Seleccione una opción: ")
+
+    if opcion == '1':
+        comprar_departamento()
+    elif opcion == '2':
+        mostrar_departamentos_disponibles()
+    elif opcion == '3':
+        ver_listado_compradores()
+    elif opcion == '4':
+        mostrar_ventas_totales()
+    elif opcion == '5':
+        fecha=datetime.now().date()
+        print("Saliendo del sistema\nCameron Perez.¡Gracias!")
+        print(fecha)
+        break
+    else:
+        print("Opción inválida. Intente nuevamente.")
